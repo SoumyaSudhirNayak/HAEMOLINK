@@ -434,7 +434,7 @@ export function LandingPage({ onGetStarted, onGoToAdmin }: LandingPageProps) {
           </div>
 
           <div className="border-t border-gray-200 pt-8 flex items-center justify-between">
-            <p className="text-gray-600">© 2025 HAEMOLINK. TEAM KRYPTOS.</p>
+            <p className="text-gray-600">© 2026 HAEMOLINK. TEAM KRYPTOS.</p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-gray-600 hover:text-gray-900 transition">Twitter</a>
               <a href="#" className="text-gray-600 hover:text-gray-900 transition">LinkedIn</a>
