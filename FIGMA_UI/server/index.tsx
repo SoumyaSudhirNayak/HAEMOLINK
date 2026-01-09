@@ -1,6 +1,6 @@
-import { Hono } from "npm:hono";
-import { cors } from "npm:hono/cors";
-import { logger } from "npm:hono/logger";
+import { Hono } from "npm:hono@4.11.3";
+import { cors } from "npm:hono@4.11.3/cors";
+import { logger } from "npm:hono@4.11.3/logger";
 import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 import * as kv from "./kv_store.tsx";
 
@@ -28,6 +28,11 @@ const parseEnvFile = (text: string) => {
 };
 
 const loadEnvIfMissing = async () => {
+  const isDeploy =
+    (Deno.env.get("DENO_DEPLOYMENT_ID") || "").trim().length > 0 ||
+    (Deno.env.get("DENO_REGION") || "").trim().length > 0;
+  if (isDeploy) return;
+
   const candidates = [
     new URL("../.env.local", import.meta.url),
     new URL("../.env", import.meta.url),
@@ -74,6 +79,10 @@ app.use(
 
 // Health check endpoint
 app.get("/make-server-5910385d/health", (c) => {
+  return c.json({ status: "ok" });
+});
+
+app.get("/health", (c) => {
   return c.json({ status: "ok" });
 });
 
@@ -1155,4 +1164,5 @@ app.post("/notify/queue-reminders", async (c) => {
   return c.json({ ok: true, queuedSchedules: data ?? 0 });
 });
 
-Deno.serve(app.fetch);
+const port = Number((Deno.env.get("PORT") || "").trim() || "8000");
+Deno.serve({ port, hostname: "0.0.0.0" }, app.fetch);
