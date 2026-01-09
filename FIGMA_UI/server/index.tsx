@@ -1164,5 +1164,13 @@ app.post("/notify/queue-reminders", async (c) => {
   return c.json({ ok: true, queuedSchedules: data ?? 0 });
 });
 
-const port = Number((Deno.env.get("PORT") || "").trim() || "8000");
-Deno.serve({ port, hostname: "0.0.0.0" }, app.fetch);
+const isDeployRuntime =
+  (Deno.env.get("DENO_DEPLOYMENT_ID") || "").trim().length > 0 ||
+  (Deno.env.get("DENO_REGION") || "").trim().length > 0;
+
+if (isDeployRuntime) {
+  Deno.serve(app.fetch);
+} else {
+  const port = Number((Deno.env.get("PORT") || "").trim() || "8000");
+  Deno.serve({ port, hostname: "0.0.0.0" }, app.fetch);
+}
