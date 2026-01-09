@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": "cd FIGMA_UI && npm ci && npm run build",
+  "outputDirectory": "FIGMA_UI/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
